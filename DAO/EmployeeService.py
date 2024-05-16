@@ -1,3 +1,4 @@
+from Exceptions.Exception import EmployeeNotFoundException
 from Util.DBconn import DBConnection
 class EmployeeService(DBConnection):
     def read_employees(self):
@@ -22,19 +23,29 @@ class EmployeeService(DBConnection):
 
     def delete_employee(self, employee_id):
         try:
-            self.cursor.execute("DELETE FROM Employee WHERE EmployeeID = ?", (employee_id,))
+            self.cursor.execute(
+                "DELETE FROM Employee WHERE EmployeeID = ?", (employee_id,)
+            )
+            if self.cursor.rowcount == 0:
+                raise EmployeeNotFoundException(employee_id)
+            self.conn.commit()
+            print("Employee deleted successfully.")
         except Exception as e:
-            print(e)     
-        self.conn.commit()
-        print("Employee deleted successfully.")
+            print(e)
 
     def update_employee(self, employee_data):
         try:
             self.cursor.execute(
-            "UPDATE Employee SET FirstName = ?, LastName = ?, DateOfBirth = ?, Gender = ?, Email = ?, PhoneNumber = ?, Address = ?, Position = ?, JoiningDate = ?, TerminationDate = ?WHERE EmployeeID = ?"
-            ,employee_data,
-        )
+                """
+                UPDATE Employee
+                SET FirstName = ?, LastName = ?, DateOfBirth = ?, Gender = ?, Email = ?, PhoneNumber = ?, Address = ?, Position = ?, JoiningDate = ?, TerminationDate = ?
+                WHERE EmployeeID = ?
+                """,
+                employee_data,
+            )
+            if self.cursor.rowcount == 0:
+                raise EmployeeNotFoundException(employee_data[10])
+            self.conn.commit()
+            print("Employee updated successfully.")
         except Exception as e:
-            print(e)  
-        self.conn.commit()
-        print("Employee updated successfully.")
+            print(e)

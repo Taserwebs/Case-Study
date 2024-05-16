@@ -1,3 +1,4 @@
+from Exceptions.Exception import InvalidInputException, TaxCalculationException
 from Util.DBconn import DBConnection
 
 class TaxService(DBConnection):
@@ -12,8 +13,29 @@ class TaxService(DBConnection):
             print(e)  
 
     def calculate_tax(self, employee_id, tax_year):
-        # Your logic for calculating taxes goes here
-        pass
+      try:
+            self.cursor.execute(
+                "SELECT SUM(TaxableIncome) FROM Tax WHERE EmployeeID = ? AND TaxYear = ?",
+                (employee_id, tax_year),
+            )
+            total_taxable_income = self.cursor.fetchone()[0]
+            if total_taxable_income is None:
+                raise TaxCalculationException(
+                    f"No taxable income found for Employee ID {employee_id} in Tax Year {tax_year}"
+                )
+            if tax_year < 0:  # Example condition for invalid tax year
+                raise InvalidInputException("Tax year cannot be negative")
+            # Applying tax rate (assuming a fixed tax rate for simplicity)
+            tax_rate = 0.15
+            tax_amount = total_taxable_income * tax_rate
+            print(
+                f"Tax calculated for Employee ID {employee_id} for Tax Year {tax_year}:"
+            )
+            print(f"Total Taxable Income: {total_taxable_income}")
+            print(f"Tax Rate: {tax_rate}")
+            print(f"Tax Amount: {tax_amount}")
+      except Exception as e:
+            print(e)  
 
     def get_tax_by_id(self, tax_id):
         try:

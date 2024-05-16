@@ -1,3 +1,4 @@
+from Exceptions.Exception import FinancialRecordException
 from Util.DBconn import DBConnection
 
 class FinancialRecordService(DBConnection):
@@ -32,20 +33,28 @@ class FinancialRecordService(DBConnection):
     def get_financial_records_for_employee(self, employee_id):
         try:
             self.cursor.execute(
-            "SELECT * FROM FinancialRecord WHERE EmployeeID = ?", (employee_id,)
-        )
+                "SELECT * FROM FinancialRecord WHERE EmployeeID = ?", (employee_id,)
+            )
             records = self.cursor.fetchall()
+            if not records:
+                raise FinancialRecordException(
+                    f"No financial records found for Employee ID {employee_id}."
+                )
             for record in records:
                 print(record)
         except Exception as e:
-            print(e)  
+            print(e) 
 
     def get_financial_records_for_date(self, record_date):
         try:
             self.cursor.execute(
-            "SELECT * FROM FinancialRecord WHERE RecordDate = ?", (record_date,)
-        )
+                "SELECT * FROM FinancialRecord WHERE RecordDate = ?", (record_date,)
+            )
             records = self.cursor.fetchall()
+            if not records:
+                raise FinancialRecordException(
+                    f"No financial records found for date {record_date}."
+                )
             for record in records:
                 print(record)
         except Exception as e:
