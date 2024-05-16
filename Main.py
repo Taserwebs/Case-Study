@@ -7,25 +7,25 @@ def employee_management():
     employee_service = EmployeeService()
 
     while True:
-        print("1. Create an employee")
-        print("2. Delete an employee")
-        print("3. Read employees")
-        print("4. Update an employee")
+        print("1. Add new Employee")
+        print("2. Delete Employee")
+        print("3. Show Employees data")
+        print("4. Update an employee data")
         print("5. Exit")
         choice = input("Enter your choice: ")
 
         if choice == "1":
             employee_data = (
-                input("Enter first name: "),
-                input("Enter last name: "),
-                input("Enter date of birth (YYYY-MM-DD): "),
-                input("Enter gender: "),
-                input("Enter email: "),
-                input("Enter phone number: "),
-                input("Enter address: "),
-                input("Enter position: "),
-                input("Enter joining date (YYYY-MM-DD): "),
-                input("Enter termination date (YYYY-MM-DD, if any): "),
+                input("Enter First Name: "),
+                input("Enter Last Name: "),
+                input("Enter Date Of Birth (YYYY-MM-DD): "),
+                input("Enter Gender: "),
+                input("Enter Email: "),
+                input("Enter Phone Number: "),
+                input("Enter Address: "),
+                input("Enter Position: "),
+                input("Enter Joining Date (YYYY-MM-DD): "),
+                input("Enter Termination Date (YYYY-MM-DD, if any): "),
             )
             employee_service.create_employee(employee_data)
         elif choice == "2":
@@ -37,17 +37,17 @@ def employee_management():
         elif choice == "4":
             employee_service.read_employees()
             employee_data = (
-                input("Enter first name: "),
-                input("Enter last name: "),
-                input("Enter date of birth (YYYY-MM-DD): "),
-                input("Enter gender: "),
-                input("Enter email: "),
-                input("Enter phone number: "),
-                input("Enter address: "),
-                input("Enter position: "),
-                input("Enter joining date (YYYY-MM-DD): "),
-                input("Enter termination date (YYYY-MM-DD, if any): "),
-                input("Enter the EmployeeID to update: "),
+                input("Enter First Name: "),
+                input("Enter Last Name: "),
+                input("Enter Date Of Birth (YYYY-MM-DD): "),
+                input("Enter Gender: "),
+                input("Enter Email: "),
+                input("Enter Phone Number: "),
+                input("Enter Address: "),
+                input("Enter Position: "),
+                input("Enter Joining Date (YYYY-MM-DD): "),
+                input("Enter Termination Date (YYYY-MM-DD, if any): "),
+                input("Enter The EmployeeID to update: "),
             )
             employee_service.update_employee(employee_data)
         elif choice == "5":
