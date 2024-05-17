@@ -1,7 +1,31 @@
-from Exceptions.Exception import NotNullException, PayrollGenerationException
 from Util.DBconn import DBConnection
+from Exceptions.Exception import PayrollGenerationException
+from abc import ABC, abstractmethod
 
-class PayrollService(DBConnection):
+
+class IPayrollService(ABC):
+    @abstractmethod
+    def read_payrolls(self):
+        pass
+
+    @abstractmethod
+    def generate_payroll(self, employee_id, start_date, end_date):
+        pass
+
+    @abstractmethod
+    def get_payroll_by_id(self, payroll_id):
+        pass
+
+    @abstractmethod
+    def get_payrolls_for_employee(self, employee_id):
+        pass
+
+    @abstractmethod
+    def get_payrolls_for_period(self, start_date, end_date):
+        pass
+
+
+class PayrollService(DBConnection, IPayrollService):
 
     def read_payrolls(self):
         try:
@@ -9,8 +33,9 @@ class PayrollService(DBConnection):
             payrolls = self.cursor.fetchall()
             for payroll in payrolls:
                 print(payroll)
+            return payrolls
         except Exception as e:
-            print(e)  
+            print(e)
 
     def generate_payroll(self, employee_id, start_date, end_date):
         try:
@@ -40,29 +65,36 @@ class PayrollService(DBConnection):
 
     def get_payroll_by_id(self, payroll_id):
         try:
-            self.cursor.execute("SELECT * FROM Payroll WHERE PayrollID = ?", (payroll_id,))
+            self.cursor.execute(
+                "SELECT * FROM Payroll WHERE PayrollID = ?", (payroll_id,)
+            )
             payroll = self.cursor.fetchone()
             print(payroll)
+            return payroll
         except Exception as e:
-            print(e)  
+            print(e)
 
     def get_payrolls_for_employee(self, employee_id):
         try:
-            self.cursor.execute("SELECT * FROM Payroll WHERE EmployeeID = ?", (employee_id,))
+            self.cursor.execute(
+                "SELECT * FROM Payroll WHERE EmployeeID = ?", (employee_id,)
+            )
             payrolls = self.cursor.fetchall()
             for payroll in payrolls:
                 print(payroll)
+            return payrolls
         except Exception as e:
-            print(e)  
+            print(e)
 
     def get_payrolls_for_period(self, start_date, end_date):
         try:
             self.cursor.execute(
-            "SELECT * FROM Payroll WHERE PayPeriodStartDate >= ? AND PayPeriodEndDate <= ?",
-            (start_date, end_date),
-        )
+                "SELECT * FROM Payroll WHERE PayPeriodStartDate >= ? AND PayPeriodEndDate <= ?",
+                (start_date, end_date),
+            )
             payrolls = self.cursor.fetchall()
             for payroll in payrolls:
                 print(payroll)
+            return payrolls
         except Exception as e:
-            print(e)  
+            print(e)

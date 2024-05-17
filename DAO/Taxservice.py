@@ -1,7 +1,34 @@
-from Exceptions.Exception import InvalidInputException, TaxCalculationException
 from Util.DBconn import DBConnection
+from Exceptions.Exception import (
+    InvalidInputException,
+    TaxCalculationException,
+)
+from abc import ABC, abstractmethod
 
-class TaxService(DBConnection):
+
+class ITaxService(ABC):
+    @abstractmethod
+    def read_taxes(self):
+        pass
+
+    @abstractmethod
+    def calculate_tax(self, employee_id, tax_year):
+        pass
+
+    @abstractmethod
+    def get_tax_by_id(self, tax_id):
+        pass
+
+    @abstractmethod
+    def get_taxes_for_employee(self, employee_id):
+        pass
+
+    @abstractmethod
+    def get_taxes_for_year(self, tax_year):
+        pass
+
+
+class TaxService(ITaxService,DBConnection):
 
     def read_taxes(self):
         try:
@@ -10,10 +37,10 @@ class TaxService(DBConnection):
             for tax in taxes:
                 print(tax)
         except Exception as e:
-            print(e)  
+            print(e)
 
     def calculate_tax(self, employee_id, tax_year):
-      try:
+        try:
             self.cursor.execute(
                 "SELECT SUM(TaxableIncome) FROM Tax WHERE EmployeeID = ? AND TaxYear = ?",
                 (employee_id, tax_year),
@@ -34,8 +61,8 @@ class TaxService(DBConnection):
             print(f"Total Taxable Income: {total_taxable_income}")
             print(f"Tax Rate: {tax_rate}")
             print(f"Tax Amount: {tax_amount}")
-      except Exception as e:
-            print(e)  
+        except Exception as e:
+            print(e)
 
     def get_tax_by_id(self, tax_id):
         try:
@@ -43,16 +70,18 @@ class TaxService(DBConnection):
             tax = self.cursor.fetchone()
             print(tax)
         except Exception as e:
-            print(e)  
+            print(e)
 
     def get_taxes_for_employee(self, employee_id):
         try:
-            self.cursor.execute("SELECT * FROM Tax WHERE EmployeeID = ?", (employee_id,))
+            self.cursor.execute(
+                "SELECT * FROM Tax WHERE EmployeeID = ?", (employee_id,)
+            )
             taxes = self.cursor.fetchall()
             for tax in taxes:
                 print(tax)
         except Exception as e:
-            print(e)  
+            print(e)
 
     def get_taxes_for_year(self, tax_year):
         try:
@@ -61,4 +90,4 @@ class TaxService(DBConnection):
             for tax in taxes:
                 print(tax)
         except Exception as e:
-            print(e)  
+            print(e)

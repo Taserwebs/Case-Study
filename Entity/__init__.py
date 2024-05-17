@@ -1,4 +1,4 @@
-from .Employee import Employee
+from .Employees import Employee
 from .FinancialRecord import FinancialRecord
-from .Payroll import Payroll
+from .PayRoll import Payroll
 from .Tax import Tax
