@@ -62,6 +62,7 @@ class EmployeeService(DBConnection, IEmployeeService):
             self.cursor.execute(
                 "DELETE FROM Employee WHERE EmployeeID = ?", (employee_id,)
             )
+            
             if self.cursor.rowcount == 0:
                 raise EmployeeNotFoundException(employee_id)
             self.conn.commit()
